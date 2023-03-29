@@ -1,81 +1,98 @@
-var video;
+const video = document.querySelector("#player1");
+video.autoplay = false;
+video.loop = false;
 
-window.addEventListener("load", function() 
-{
-	console.log("Good job opening the window")
-	video = document.querySelector('bandvid');
-	video.autoplay = false;
-	video.loop = false;
-	console.log("Auto play is set to " + video.autoplay);
-	console.log("Loop is set to " + video.loop);
-});
+const playBtn = document.querySelector("#play");
+playBtn.addEventListener("click", playVideo);
 
-document.querySelector("#play").addEventListener("click", function()
-{
-	console.log("Play Video");
-	video.play();
-	volume = document.querySelector("#slider").value;
-	document.getElementById("volume").innerHTML = (video.volume * 100).toString() + '%';
-});
+const pauseBtn = document.querySelector("#pause");
+pauseBtn.addEventListener("click", pauseVideo);
 
-document.querySelector("#pause").addEventListener("click", function()
-{
-	console.log("Pause Video");
-	video.pause();
-});
+const slowDownBtn = document.querySelector("#slower");
+slowDownBtn.addEventListener("click", slowDownVideo);
 
-document.querySelector("#slower").addEventListener("click", function()
-{
-	video.playbackRate *= 0.9;
-	console.log("Slow down video");
-	console.log("Video speed is now" + video.playbackRate);
-});
+const speedUpBtn = document.querySelector("#faster");
+speedUpBtn.addEventListener("click", speedUpVideo);
 
-document.querySelector("#faster").addEventListener("click", function()
-{
-	video.playbackRate = 0.9 * video.playbackRate;
-	console.log("Speed video");
-	console.log("Sped Down to" + video.playbackRate);
-});
+const skipBtn = document.querySelector("#skip");
+skipBtn.addEventListener("click", skipAhead);
 
-document.querySelector("#skip").addEventListener("click", function()
-{
-	console.log("Skip ahead in video");
-	if(video.currentTime+10>=video.duration){
-		video.currentTime = 0;
-	}
-	else{
-		video.currentTime+=10;
-	}
-	console.log("Current video time is" + video.currentTime);
-});
+const muteBtn = document.querySelector("#mute");
+muteBtn.addEventListener("click", muteVideo);
 
-document.querySelector("#mute").addEventListener("click", function()
-{
-	if(video.muted){
-		video.muted = false;
-		document.querySelector("#mute").textContent = 'Mute';
-		console.log("Unmute");
-	}
-	else{
-		video.muted = true;
-		document.querySelector("#mute").textContent = 'Unmute';
-		console.log("Mute");
-	}
-});
+const volumeSlider = document.querySelector("#slider");
+volumeSlider.addEventListener("input", changeVolume);
 
-document.querySelector("#slider").addEventListener("click", function()
-{
-	video.volume = slider.value/100;
-	document.getElementById("volume").innerHTML= video.volume*100+"%";
-});
+const volumeInfo = document.querySelector("#volume");
 
-document.querySelector("#vintage").addEventListener("click", function() 
-{
-	video.className = 'oldSchool';
-});
 
-document.querySelector("#orig").addEventListener("click", function() 
+function playVideo() 
 {
-	video.className = 'video';
-});
+    video.play();
+    const volumePercent = (video.volume * 100).toFixed(0);
+    volumeInfo.textContent = volumePercent + "%";
+}
+
+
+function pauseVideo() 
+{
+    video.pause();
+}
+
+function slowDownVideo() 
+{
+    video.playbackRate -= 0.1;
+    console.log(`Videos New Speed Is: ${video.playbackRate}`);
+}
+
+function speedUpVideo() 
+{
+    const newSpeed = video.playbackRate + (0.1 * video.playbackRate);
+    video.playbackRate = newSpeed;
+    console.log(`Video's New Speed Is: ${newSpeed}`);
+}
+
+function skipAhead() 
+{
+    if (video.currentTime + 10 < video.duration) {
+        video.currentTime += 10;
+    } else {
+        video.currentTime = 0;
+    }
+    console.log(`Video's Current Time Is: ${video.currentTime}`);
+}
+
+function muteVideo() 
+{
+    if (video.muted) {
+        video.muted = false;
+        muteBtn.textContent = "Mute";
+    } else {
+        video.muted = true;
+        muteBtn.textContent = "Unmute";
+    }
+}
+
+function changeVolume() 
+{
+    video.volume = volumeSlider.value / 100;
+    volumeInfo.textContent = `${volumeSlider.value}%`;
+}
+
+
+const oldSchoolBtn = document.querySelector("#vintage");
+oldSchoolBtn.addEventListener("click", addOldSchoolClass);
+
+const originalBtn = document.querySelector("#orig");
+originalBtn.addEventListener("click", removeOldSchoolClass);
+
+function addOldSchoolClass() 
+{
+    video.classList.add("oldSchool");
+}
+
+
+function removeOldSchoolClass() 
+{
+    video.classList.remove("oldSchool");
+}
